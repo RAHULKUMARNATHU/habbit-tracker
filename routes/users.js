@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 
@@ -123,6 +124,16 @@ router.post('/login', (req, res) => {
         }
     });
 
+});
+
+
+
+//---------Logout Handle----------//
+router.get('/logout', (req, res) => {
+  // req.logout();
+  req.session.destroy(()=>{
+    res.redirect('/');
+  });
 });
 
 module.exports = router;
