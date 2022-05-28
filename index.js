@@ -5,16 +5,33 @@ const mongoose = require('mongoose');
 const flash = require('connect-flash');
 const session = require('express-session');
 
+const dotenv = require("dotenv");  //require dotenv package
+dotenv.config({ path: "./config.env" }); //import config.env file
+
+const DB = process.env.DATABASE;  
+const PORT = process.env.PORT;
+
+mongoose
+  .connect(DB, {
+    usenewurlparser: true,
+    useunifiedtopology: true,
+  })
+  .then(() => {
+    console.log("Successfully connected ");
+  })
+  .catch((error) => {
+    console.log(`can not connect to database, ${error}`);
+  });
 const app = express();
 
-//-----DB Config---------//
-const db = require('./config/keys').MongoURI;
+// //-----DB Config---------//
+// const db = require('./config/keys').MongoURI;
 
 
-//------Connect to Mongo--------//
-mongoose.connect(db)
-    .then(() => console.log("Connected to MongoDB successfully!"))
-    .catch(err => console.log(err));
+// //------Connect to Mongo--------//
+// mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
+//     .then(() => console.log("Connected to MongoDB successfully!"))
+//     .catch(err => console.log(err));
 
 //-----EJS---------//
 app.use(expressLayouts);
@@ -53,7 +70,7 @@ app.use(function (req, res, next) {
 app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));
 
-const PORT = process.env.PORT ||8000;
+// const PORT = process.env.PORT ||8000;
 
 app.listen(PORT, console.log(`Server started on port  ${PORT}`));
 
